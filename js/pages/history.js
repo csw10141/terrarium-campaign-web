@@ -159,7 +159,7 @@ async function showDetail(entry) {
           answerText = opt ? `${opt.label} - ${opt.description}` : answer;
         } else if (q.type === 'contact') {
           const c = typeof answer === 'object' ? answer : {};
-          answerText = `${c.method || '-'} / ${c.value || '(미입력)'}`;
+          answerText = `${c.method || '-'} / ${maskValue(c.value)}`;
         } else {
           answerText = q.options[answer] || answer;
         }
@@ -194,6 +194,14 @@ async function showDetail(entry) {
   } catch (e) {
     body.innerHTML = '<p style="color: var(--error);">복호화에 실패했습니다.</p>';
   }
+}
+
+function maskValue(val) {
+  if (!val) return '(미입력)';
+  const s = String(val);
+  if (s.length <= 3) return '*'.repeat(s.length);
+  // Show first 3 and last 1, mask the rest
+  return s.slice(0, 3) + '*'.repeat(s.length - 4) + s.slice(-1);
 }
 
 function closeModal() {
