@@ -1,4 +1,6 @@
 // Google Sheets Sync via Apps Script
+import { decryptSurvey } from './store.js';
+
 // Set your Apps Script Web App URL here or in settings
 const ENDPOINT_KEY = 'isme-sync-endpoint';
 
@@ -10,12 +12,15 @@ export function setEndpoint(url) {
   localStorage.setItem(ENDPOINT_KEY, url);
 }
 
-// Send a single survey to Google Sheets
-async function sendToSheets(survey) {
+// Send a single survey to Google Sheets (decrypt before sending)
+async function sendToSheets(encryptedSurvey) {
   const endpoint = getEndpoint();
   if (!endpoint) {
     throw new Error('전송 URL이 설정되지 않았습니다.');
   }
+
+  // Decrypt data for transmission
+  const survey = await decryptSurvey(encryptedSurvey);
 
   // Flatten the data for spreadsheet
   const payload = {

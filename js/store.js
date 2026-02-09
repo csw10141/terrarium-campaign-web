@@ -1,4 +1,6 @@
 // IndexedDB Store using inline idb-keyval pattern
+import { encrypt, decrypt } from './crypto.js';
+
 const DB_NAME = 'isme-db';
 const STORE_NAME = 'surveys';
 const DB_VERSION = 1;
@@ -36,11 +38,12 @@ function uuid() {
   });
 }
 
-// Save a survey response
+// Save a survey response (encrypted)
 export async function saveSurvey(surveyType, answers, contact = {}) {
   const store = await tx('readwrite');
-  const entry = {
-    id: uuid(),
+
+  // Plain data to encrypt
+  const plainData = {
     surveyType,
     answers,
     contact,
@@ -50,7 +53,15 @@ export async function saveSurvey(surveyType, answers, contact = {}) {
       screenSize: `${screen.width}x${screen.height}`,
       language: navigator.language,
       online: navigator.onLine
-    },
+    }
+  };
+
+  // Encrypt sensitive payload
+  const encrypted = await encrypt(plainData);
+
+  const entry = {
+    id: uuid(),
+    encrypted,   // { iv, data } - AES-GCM encrypted
     synced: false
   };
 
@@ -59,6 +70,13 @@ export async function saveSurvey(surveyType, answers, contact = {}) {
     request.onsuccess = () => resolve(entry);
     request.onerror = () => reject(request.error);
   });
+}
+
+// Decrypt a single survey entry
+export async function decryptSurvey(entry) {
+  if (!entry.encrypted) return entry; // legacy unencrypted data
+  const plain = await decrypt(entry.encrypted);
+  return { id: entry.id, ...plain, synced: entry.synced };
 }
 
 // Get all surveys
