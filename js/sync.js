@@ -2,7 +2,7 @@
 import { decryptSurvey } from './store.js';
 
 // Apps Script Web App URL
-const ENDPOINT = 'https://script.google.com/macros/s/AKfycbzu0qCdMsqZar1Hkucl9peS7EB-HVV5EkTBGINWkUJxFLqYQV0FSIZarQRUQ8LaGXMd/exec';
+const ENDPOINT = 'https://script.google.com/macros/s/AKfycbxteQz3SN2shYFNtcPeBRD2tGwyw5NowTteYyMvICJHMQfrn7tO_xqBDgwyE4kbcdJB/exec';
 
 export function getEndpoint() {
   return ENDPOINT;
@@ -129,7 +129,15 @@ function doPost(e) {
       sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
     }
 
-    sheet.appendRow(row);
+    // appendRow 대신 setValues 사용 (숫자 자동변환 방지)
+    var newRow = sheet.getLastRow() + 1;
+    sheet.getRange(newRow, 1, 1, row.length).setValues([row]);
+
+    // contactValue 컬럼을 텍스트 형식으로 지정 (010 앞자리 보존)
+    var contactColIndex = headers.indexOf('contactValue');
+    if (contactColIndex >= 0) {
+      sheet.getRange(newRow, contactColIndex + 1).setNumberFormat('@');
+    }
 
     return ContentService
       .createTextOutput(JSON.stringify({ result: 'success' }))
