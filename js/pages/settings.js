@@ -1,10 +1,9 @@
 import { navigate } from '../router.js';
 import { getSurveyCounts, getUnsyncedSurveys, markSynced } from '../store.js';
-import { getEndpoint, setEndpoint, syncAll, APPS_SCRIPT_CODE } from '../sync.js';
+import { syncAll } from '../sync.js';
 
 export async function renderSettings() {
   const counts = await getSurveyCounts();
-  const endpoint = getEndpoint();
 
   const html = `
     <div class="page settings">
@@ -17,7 +16,7 @@ export async function renderSettings() {
         <h1 class="settings__title">설정</h1>
       </div>
 
-      <!-- Data Stats -->
+      <!-- Data Stats & Sync -->
       <div class="settings__section">
         <div class="settings__section-title">데이터 현황</div>
         <div class="settings__card">
@@ -35,48 +34,6 @@ export async function renderSettings() {
           </div>
           <button class="btn btn--primary settings__sync-btn" id="btn-sync" ${counts.pending === 0 ? 'disabled' : ''}>
             ${counts.pending > 0 ? `${counts.pending}건 전송하기` : '전송할 데이터 없음'}
-          </button>
-        </div>
-      </div>
-
-      <!-- Sync Endpoint -->
-      <div class="settings__section">
-        <div class="settings__section-title">전송 설정</div>
-        <div class="settings__card">
-          <div class="settings__endpoint">
-            <div class="settings__endpoint-label">Google Apps Script URL</div>
-            <input
-              type="url"
-              class="settings__endpoint-input"
-              id="endpoint-input"
-              placeholder="https://script.google.com/macros/s/..."
-              value="${endpoint}"
-            >
-          </div>
-          <button class="btn btn--secondary" id="btn-save-endpoint" style="margin-top: 12px;">
-            URL 저장
-          </button>
-          <p class="settings__info">
-            Google Sheets에 데이터를 전송합니다.<br>
-            Apps Script 웹앱 URL을 입력하세요.
-          </p>
-        </div>
-      </div>
-
-      <!-- Apps Script Guide -->
-      <div class="settings__section">
-        <div class="settings__section-title">설정 가이드</div>
-        <div class="settings__card">
-          <p class="settings__info" style="margin-top: 0;">
-            <strong>1.</strong> Google Sheets를 새로 만드세요.<br>
-            <strong>2.</strong> 확장 프로그램 → Apps Script 클릭<br>
-            <strong>3.</strong> 아래 코드를 붙여넣기<br>
-            <strong>4.</strong> 배포 → 새 배포 → 웹 앱 선택<br>
-            <strong>5.</strong> 액세스 권한: "모든 사용자"<br>
-            <strong>6.</strong> 생성된 URL을 위에 입력
-          </p>
-          <button class="btn btn--ghost" id="btn-copy-script" style="margin-top: 8px;">
-            Apps Script 코드 복사
           </button>
         </div>
       </div>
@@ -125,23 +82,6 @@ export async function renderSettings() {
 
       // Sync button
       document.getElementById('btn-sync').addEventListener('click', handleSync);
-
-      // Save endpoint
-      document.getElementById('btn-save-endpoint').addEventListener('click', () => {
-        const url = document.getElementById('endpoint-input').value.trim();
-        setEndpoint(url);
-        showToast(url ? 'URL이 저장되었습니다.' : 'URL이 삭제되었습니다.');
-      });
-
-      // Copy script code
-      document.getElementById('btn-copy-script').addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(APPS_SCRIPT_CODE.trim());
-          showToast('코드가 복사되었습니다!');
-        } catch (e) {
-          showToast('복사에 실패했습니다.');
-        }
-      });
 
       // Network status listener
       const updateNetStatus = () => {

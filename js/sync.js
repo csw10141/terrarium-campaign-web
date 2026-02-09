@@ -1,15 +1,11 @@
 // Google Sheets Sync via Apps Script
 import { decryptSurvey } from './store.js';
 
-// Set your Apps Script Web App URL here or in settings
-const ENDPOINT_KEY = 'isme-sync-endpoint';
+// Apps Script Web App URL
+const ENDPOINT = 'https://script.google.com/macros/s/AKfycbzu0qCdMsqZar1Hkucl9peS7EB-HVV5EkTBGINWkUJxFLqYQV0FSIZarQRUQ8LaGXMd/exec';
 
 export function getEndpoint() {
-  return localStorage.getItem(ENDPOINT_KEY) || '';
-}
-
-export function setEndpoint(url) {
-  localStorage.setItem(ENDPOINT_KEY, url);
+  return ENDPOINT;
 }
 
 // Send a single survey to Google Sheets (decrypt before sending)
