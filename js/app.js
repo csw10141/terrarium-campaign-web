@@ -15,11 +15,16 @@ route('/history', renderHistory);
 // Initialize router
 initRouter();
 
-// Register Service Worker
+// Register Service Worker (강제 업데이트)
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('./sw.js');
+      // 기존 SW 모두 해제 후 재등록
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      for (const reg of registrations) {
+        await reg.unregister();
+      }
+      const registration = await navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' });
       console.log('SW registered:', registration.scope);
     } catch (e) {
       console.warn('SW registration failed:', e);
