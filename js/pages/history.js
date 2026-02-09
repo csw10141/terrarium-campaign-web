@@ -150,8 +150,13 @@ async function showDetail(entry) {
     let answersHtml = '';
     if (phase && survey.answers) {
       for (const q of phase.questions) {
-        const answer = survey.answers[q.id];
-        if (answer === undefined) continue;
+        let answer;
+        if (q.type === 'contact') {
+          answer = survey.contact;
+        } else {
+          answer = survey.answers[q.id];
+        }
+        if (answer === undefined || answer === null) continue;
 
         let answerText = '';
         if (q.type === 'image') {
