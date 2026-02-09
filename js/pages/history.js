@@ -1,5 +1,5 @@
 import { navigate } from '../router.js';
-import { getAllSurveys, decryptSurvey, getSurveyCounts } from '../store.js';
+import { getAllSurveys, decryptSurvey } from '../store.js';
 import { PHASES } from '../survey-data.js';
 
 const PHASE_LABELS = {
@@ -10,7 +10,6 @@ const PHASE_LABELS = {
 
 export async function renderHistory() {
   const surveys = await getAllSurveys();
-  const counts = await getSurveyCounts();
 
   // Sort by newest first (by id/timestamp)
   surveys.sort((a, b) => {
@@ -31,20 +30,9 @@ export async function renderHistory() {
 
       <!-- Summary -->
       <div class="settings__section">
-        <div class="settings__section-title">요약</div>
-        <div class="settings__card">
-          <div class="settings__stat">
-            <span class="settings__stat-label">전체</span>
-            <span class="settings__stat-value">${counts.total}건</span>
-          </div>
-          <div class="settings__stat">
-            <span class="settings__stat-label">전송 완료</span>
-            <span class="settings__stat-value settings__stat-value--synced">${counts.synced}건</span>
-          </div>
-          <div class="settings__stat">
-            <span class="settings__stat-label">미전송</span>
-            <span class="settings__stat-value ${counts.pending > 0 ? 'settings__stat-value--pending' : ''}">${counts.pending}건</span>
-          </div>
+        <div class="settings__card" style="text-align: center;">
+          <div style="font-size: 2rem; font-weight: 800; color: var(--primary);">${String(surveys.length).padStart(2, '0')}</div>
+          <div style="font-size: 0.88rem; color: var(--text-muted); margin-top: 2px;">누적 응답</div>
         </div>
       </div>
 
@@ -58,34 +46,19 @@ export async function renderHistory() {
         ` : `
           <div id="survey-list" style="display: flex; flex-direction: column; gap: 10px;">
             ${surveys.map((s, i) => `
-              <div class="settings__card history-item" data-index="${i}" style="cursor: pointer;">
+              <div class="settings__card history-item" data-index="${i}" style="cursor: pointer; border-left: 4px solid ${s.synced ? 'var(--success)' : 'var(--accent)'};">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <div>
-                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text);">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="font-size: 0.95rem; font-weight: 700; color: var(--text);">
                       #${String(surveys.length - i).padStart(2, '0')}
                     </div>
-                    <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">
-                      ID: ${s.id.slice(0, 8)}...
+                    <div style="font-size: 0.82rem; color: var(--text-muted);">
+                      ${s.id.slice(0, 8)}
                     </div>
                   </div>
-                  <div style="text-align: right;">
-                    <span style="
-                      font-size: 0.75rem;
-                      font-weight: 600;
-                      padding: 3px 8px;
-                      border-radius: 6px;
-                      ${s.synced
-                        ? 'background: #E0FAF7; color: var(--success);'
-                        : 'background: #FFF0F5; color: var(--accent);'
-                      }
-                    ">${s.synced ? '전송됨' : '미전송'}</span>
-                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="vertical-align: middle;">
-                        <path d="M3 1v2M9 1v2M1 5h10M1 3h10v8H1z" stroke="currentColor" stroke-width="1"/>
-                      </svg>
-                      상세보기
-                    </div>
-                  </div>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M6 4L10 8L6 12" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
                 </div>
               </div>
             `).join('')}
@@ -210,12 +183,6 @@ async function showDetail(entry) {
         <div style="display: flex; justify-content: space-between;">
           <span style="font-size: 0.85rem; color: var(--text-muted);">접수 일시</span>
           <span style="font-size: 0.85rem; font-weight: 600;">${submittedAt}</span>
-        </div>
-        <div style="display: flex; justify-content: space-between;">
-          <span style="font-size: 0.85rem; color: var(--text-muted);">전송 상태</span>
-          <span style="font-size: 0.85rem; font-weight: 600; color: ${entry.synced ? 'var(--success)' : 'var(--accent)'};">
-            ${entry.synced ? '전송됨' : '미전송'}
-          </span>
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span style="font-size: 0.85rem; color: var(--text-muted);">ID</span>
