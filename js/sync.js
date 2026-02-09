@@ -80,18 +80,9 @@ export async function syncAll(getUnsyncedFn, markSyncedFn) {
   return { success, failed, error: null };
 }
 
-// Auto-sync when coming online
+// Auto-sync disabled - 수동 전송만 사용
 export function setupAutoSync(getUnsyncedFn, markSyncedFn) {
-  window.addEventListener('online', () => {
-    syncAll(getUnsyncedFn, markSyncedFn);
-  });
-
-  // Try sync on load if online
-  if (navigator.onLine) {
-    setTimeout(() => {
-      syncAll(getUnsyncedFn, markSyncedFn);
-    }, 3000);
-  }
+  // 설정 페이지에서 버튼으로만 전송
 }
 
 // Google Apps Script code for the user to deploy
