@@ -5,9 +5,6 @@ import { renderSurvey } from './pages/survey.js';
 import { renderComplete } from './pages/complete.js';
 import { renderSettings } from './pages/settings.js';
 import { renderHistory } from './pages/history.js';
-import { setupAutoSync } from './sync.js';
-import { getUnsyncedSurveys, markSynced } from './store.js';
-
 // Register routes
 route('/', renderHome);
 route('/survey/:phase', renderSurvey);
@@ -17,9 +14,6 @@ route('/history', renderHistory);
 
 // Initialize router
 initRouter();
-
-// Setup auto-sync
-setupAutoSync(getUnsyncedSurveys, markSynced);
 
 // Register Service Worker
 if ('serviceWorker' in navigator) {

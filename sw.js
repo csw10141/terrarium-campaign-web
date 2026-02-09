@@ -1,5 +1,5 @@
 // 가드너 Service Worker - Offline First
-const CACHE_NAME = 'gardener-v2';
+const CACHE_NAME = 'gardener-v3';
 
 const PRECACHE_URLS = [
   './',
