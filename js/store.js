@@ -1,7 +1,7 @@
 // IndexedDB Store using inline idb-keyval pattern
 import { encrypt, decrypt } from './crypto.js';
 
-const DB_NAME = 'isme-db';
+const DB_NAME = 'gardener-db';
 const STORE_NAME = 'surveys';
 const DB_VERSION = 1;
 

@@ -1,6 +1,6 @@
 // AES-GCM encryption using Web Crypto API
 // Key is generated once and stored in localStorage (base64)
-const KEY_STORAGE = 'isme-enc-key';
+const KEY_STORAGE = 'gardener-enc-key';
 const ALGO = 'AES-GCM';
 const KEY_LENGTH = 256;
 

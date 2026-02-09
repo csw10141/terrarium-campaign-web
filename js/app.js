@@ -1,4 +1,4 @@
-// IS,ME (이즈미) - App Entry Point
+// 가드너 - App Entry Point
 import { route, initRouter } from './router.js';
 import { renderHome } from './pages/home.js';
 import { renderSurvey } from './pages/survey.js';

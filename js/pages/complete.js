@@ -30,7 +30,7 @@ export function renderComplete(params) {
         <circle cx="30" cy="20" r="2" fill="#6C63FF"/>
       </svg>`,
       title: '함께 해주셔서 감사해요!',
-      desc: '여러분의 목소리가\nIS,ME를 만들어갑니다.'
+      desc: '여러분의 목소리가\n가드너를 만들어갑니다.'
     }
   };
 
@@ -68,7 +68,7 @@ export function renderComplete(params) {
           if (navigator.share) {
             try {
               await navigator.share({
-                title: 'IS,ME (이즈미)',
+                title: '가드너',
                 text: '지금, 나를 돌아보는 3분. 편하게 답해보세요.',
                 url: window.location.origin + window.location.pathname
               });

@@ -9,8 +9,8 @@ export async function renderHome() {
   const html = `
     <div class="page home">
       <div>
-        <div class="home__logo">IS,ME</div>
-        <div class="home__logo-sub">이즈미</div>
+        <div class="home__logo">가드너</div>
+        <div class="home__logo-sub"></div>
       </div>
 
       <p class="home__tagline">지금, 나를 돌아보는 시간</p>

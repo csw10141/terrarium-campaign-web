@@ -1,6 +1,6 @@
 {
-  "name": "IS,ME (이즈미) - 지금, 나를 돌아보는 시간",
-  "short_name": "IS,ME",
+  "name": "가드너 - 지금, 나를 돌아보는 시간",
+  "short_name": "가드너",
   "description": "20-30대 청년을 위한 자기 탐색 리서치",
   "start_url": "./index.html",
   "display": "standalone",

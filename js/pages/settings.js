@@ -65,7 +65,7 @@ export async function renderSettings() {
           </div>
           <div class="settings__stat">
             <span class="settings__stat-label">프로젝트</span>
-            <span class="settings__stat-value">IS,ME (이즈미)</span>
+            <span class="settings__stat-value">가드너</span>
           </div>
         </div>
       </div>
