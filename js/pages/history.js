@@ -179,6 +179,18 @@ async function showDetail(entry) {
       }
     }
 
+    // Contact section (always render separately)
+    const ct = survey.contact || {};
+    const hasContact = ct.method || ct.value;
+    const contactHtml = hasContact ? `
+      <div style="padding: 12px 0; border-top: 2px solid var(--border); margin-top: 8px;">
+        <div style="font-size: 0.78rem; color: var(--primary); font-weight: 600; margin-bottom: 2px;">연락처</div>
+        <div style="font-size: 0.9rem; font-weight: 600; color: var(--primary-dark);">
+          ${ct.method || '-'} / ${maskValue(ct.value)}
+        </div>
+      </div>
+    ` : '';
+
     body.innerHTML = `
       <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 2px solid var(--border);">
         <div style="display: flex; justify-content: space-between;">
@@ -195,6 +207,7 @@ async function showDetail(entry) {
         </div>
       </div>
       ${answersHtml || '<p style="color: var(--text-muted);">응답 데이터 없음</p>'}
+      ${contactHtml}
     `;
   } catch (e) {
     body.innerHTML = '<p style="color: var(--error);">복호화에 실패했습니다.</p>';

@@ -1,5 +1,5 @@
 // IS,ME Service Worker - Offline First
-const CACHE_NAME = 'isme-v3';
+const CACHE_NAME = 'isme-v4';
 
 const PRECACHE_URLS = [
   './',
