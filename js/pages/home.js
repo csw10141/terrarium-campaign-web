@@ -1,8 +1,10 @@
 import { getPhaseList } from '../survey-data.js';
 import { navigate } from '../router.js';
+import { getSurveyCounts } from '../store.js';
 
 export async function renderHome() {
   const phases = getPhaseList();
+  const counts = await getSurveyCounts();
 
   const html = `
     <div class="page home">
@@ -38,17 +40,39 @@ export async function renderHome() {
         `).join('')}
       </div>
 
+      <button class="phase-card" id="btn-history" style="max-width: 360px; width: 100%; border: 2px dashed var(--border);">
+        <div class="phase-card__icon" style="background: #F0EEFF; color: var(--primary);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="3"/>
+            <path d="M8 8h8M8 12h8M8 16h4"/>
+          </svg>
+        </div>
+        <div class="phase-card__info">
+          <div class="phase-card__title">누적 설문 ${String(counts.total).padStart(2, '0')}건</div>
+          <div class="phase-card__sub">누적설문 보기</div>
+        </div>
+        <div class="phase-card__arrow">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M7 5L12 10L7 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </button>
+
     </div>
   `;
 
   return {
     html,
     init() {
-      document.querySelectorAll('.phase-card').forEach(card => {
+      document.querySelectorAll('.phase-card[data-phase]').forEach(card => {
         card.addEventListener('click', () => {
           const phase = card.dataset.phase;
           navigate(`/survey/${phase}`);
         });
+      });
+
+      document.getElementById('btn-history').addEventListener('click', () => {
+        navigate('/history');
       });
     }
   };

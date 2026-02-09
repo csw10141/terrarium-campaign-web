@@ -746,6 +746,12 @@ body {
   to { opacity: 0; }
 }
 
+/* ===== Modal ===== */
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
 /* ===== Utilities ===== */
 .sr-only {
   position: absolute;

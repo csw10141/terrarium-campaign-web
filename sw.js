@@ -1,5 +1,5 @@
 // IS,ME Service Worker - Offline First
-const CACHE_NAME = 'isme-v2';
+const CACHE_NAME = 'isme-v3';
 
 const PRECACHE_URLS = [
   './',
@@ -17,6 +17,7 @@ const PRECACHE_URLS = [
   './js/pages/survey.js',
   './js/pages/complete.js',
   './js/pages/settings.js',
+  './js/pages/history.js',
   './assets/icons/favicon.svg',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png'

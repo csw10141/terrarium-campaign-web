@@ -4,6 +4,7 @@ import { renderHome } from './pages/home.js';
 import { renderSurvey } from './pages/survey.js';
 import { renderComplete } from './pages/complete.js';
 import { renderSettings } from './pages/settings.js';
+import { renderHistory } from './pages/history.js';
 import { setupAutoSync } from './sync.js';
 import { getUnsyncedSurveys, markSynced } from './store.js';
 
@@ -12,6 +13,7 @@ route('/', renderHome);
 route('/survey/:phase', renderSurvey);
 route('/complete/:phase', renderComplete);
 route('/settings', renderSettings);
+route('/history', renderHistory);
 
 // Initialize router
 initRouter();
