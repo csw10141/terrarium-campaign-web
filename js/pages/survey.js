@@ -1,24 +1,37 @@
-import { getPhase } from '../survey-data.js';
+import { getPhase, getInterviewFlow, getInterviewQuestionCount, INTERVIEW } from '../survey-data.js';
 import { setCurrentAnswer, getCurrentAnswer, getAllCurrentAnswers, resetCurrentState, saveSurvey } from '../store.js';
 import { navigate } from '../router.js';
 import { getSvg } from '../svg-illustrations.js';
 import { syncAll, getEndpoint } from '../sync.js';
 import { getUnsyncedSurveys, markSynced } from '../store.js';
 
-let currentQuestionIndex = 0;
-let phase = null;
+let currentIndex = 0;
+let flowItems = [];
+let totalRealQuestions = 0;
 let direction = 'right';
+let isInterview = false;
+let legacyPhaseId = null;
 
 export function renderSurvey(params) {
   const phaseId = params.phase;
-  phase = getPhase(phaseId);
+  isInterview = phaseId === 'interview';
+  legacyPhaseId = null;
 
-  if (!phase) {
-    navigate('/');
-    return { html: '', init() {} };
+  if (isInterview) {
+    flowItems = getInterviewFlow();
+    totalRealQuestions = getInterviewQuestionCount();
+  } else {
+    const phase = getPhase(phaseId);
+    if (!phase) {
+      navigate('/');
+      return { html: '', init() {} };
+    }
+    legacyPhaseId = phaseId;
+    flowItems = phase.questions.map(q => ({ ...q }));
+    totalRealQuestions = flowItems.length;
   }
 
-  currentQuestionIndex = 0;
+  currentIndex = 0;
   resetCurrentState();
 
   const html = `
@@ -34,12 +47,11 @@ export function renderSurvey(params) {
             </svg>
             이전
           </button>
-          <span id="progress-count">1 / ${phase.questions.length}</span>
+          <span id="progress-count">1 / ${totalRealQuestions}</span>
         </div>
       </div>
 
       <div class="question" id="question-area">
-        <!-- Question content rendered here -->
       </div>
 
       <div class="survey__next-wrap">
@@ -51,32 +63,63 @@ export function renderSurvey(params) {
   return {
     html,
     init() {
-      renderQuestion();
-
+      renderItem();
       document.getElementById('btn-next').addEventListener('click', handleNext);
       document.getElementById('btn-back').addEventListener('click', handleBack);
     }
   };
 }
 
-function renderQuestion() {
-  const q = phase.questions[currentQuestionIndex];
+function getRealQuestionIndex() {
+  let count = 0;
+  for (let i = 0; i < currentIndex; i++) {
+    if (flowItems[i].type !== 'section-break') count++;
+  }
+  return count;
+}
+
+function renderItem() {
+  const item = flowItems[currentIndex];
   const area = document.getElementById('question-area');
   const progressBar = document.getElementById('progress-bar');
   const progressCount = document.getElementById('progress-count');
   const btnBack = document.getElementById('btn-back');
   const btnNext = document.getElementById('btn-next');
 
-  const progress = ((currentQuestionIndex) / phase.questions.length) * 100;
+  const realIdx = getRealQuestionIndex();
+  const progress = (realIdx / totalRealQuestions) * 100;
   progressBar.style.width = `${progress}%`;
-  progressCount.textContent = `${currentQuestionIndex + 1} / ${phase.questions.length}`;
-  btnBack.disabled = currentQuestionIndex === 0;
+  btnBack.disabled = currentIndex === 0;
 
-  const isLast = currentQuestionIndex === phase.questions.length - 1;
+  if (item.type === 'section-break') {
+    progressCount.textContent = `섹션 ${item.sectionIndex + 1} / ${INTERVIEW.sections.length}`;
+    btnNext.disabled = false;
+    btnNext.textContent = '계속하기';
+
+    const animClass = direction === 'right' ? 'page--slide-right' : 'page--slide-left';
+    area.innerHTML = `
+      <div class="section-break ${animClass}">
+        <div class="section-break__icon">
+          ${getSvg(item.icon)}
+        </div>
+        <h2 class="section-break__title">${item.title}</h2>
+        <p class="section-break__subtitle">${item.subtitle}</p>
+        <div class="section-break__divider"></div>
+      </div>
+    `;
+    return;
+  }
+
+  progressCount.textContent = `${realIdx + 1} / ${totalRealQuestions}`;
+
+  const isLast = currentIndex === flowItems.length - 1;
   btnNext.textContent = isLast ? '제출하기' : '다음';
 
-  const savedAnswer = getCurrentAnswer(q.id);
+  renderQuestion(item, area, btnNext);
+}
 
+function renderQuestion(q, area, btnNext) {
+  const savedAnswer = getCurrentAnswer(q.id);
   const animClass = direction === 'right' ? 'page--slide-right' : 'page--slide-left';
 
   if (q.type === 'text') {
@@ -96,7 +139,6 @@ function renderQuestion() {
       </div>
     `;
 
-    // Enable next if optional or already answered
     btnNext.disabled = !q.optional && savedAnswer === undefined;
 
     area.querySelectorAll('.option').forEach(opt => {
@@ -167,7 +209,6 @@ function renderQuestion() {
       </div>
     `;
 
-    // Contact is always optional, enable next
     btnNext.disabled = false;
 
     area.querySelectorAll('.option').forEach(opt => {
@@ -188,36 +229,36 @@ function renderQuestion() {
 }
 
 async function handleNext() {
-  if (currentQuestionIndex < phase.questions.length - 1) {
+  if (currentIndex < flowItems.length - 1) {
     direction = 'right';
-    currentQuestionIndex++;
-    renderQuestion();
+    currentIndex++;
+    renderItem();
   } else {
-    // Submit
     const answers = getAllCurrentAnswers();
     const contact = answers.contact || {};
     delete answers.contact;
 
-    try {
-      await saveSurvey(phase.id, answers, contact);
+    const surveyType = isInterview ? 'interview' : (legacyPhaseId || 'phase1');
 
-      // Try auto-sync if online
+    try {
+      await saveSurvey(surveyType, answers, contact);
+
       if (navigator.onLine && getEndpoint()) {
         syncAll(getUnsyncedSurveys, markSynced).catch(() => {});
       }
 
-      navigate(`/complete/${phase.id}`);
+      navigate(`/complete/${surveyType}`);
     } catch (e) {
       console.error('Save failed:', e);
-      navigate(`/complete/${phase.id}`);
+      navigate(`/complete/${surveyType}`);
     }
   }
 }
 
 function handleBack() {
-  if (currentQuestionIndex > 0) {
+  if (currentIndex > 0) {
     direction = 'left';
-    currentQuestionIndex--;
-    renderQuestion();
+    currentIndex--;
+    renderItem();
   }
 }

@@ -1,7 +1,106 @@
-// Inline SVG illustrations for image selection questions
-// Each returns an SVG string that renders at 120x120
+// Inline SVG illustrations for image selection & UI
+// Includes: survey image options, hero, section breaks
 
 export const SVG = {
+  // ── Hero illustration for home page ──
+  'hero': `
+    <svg width="240" height="200" viewBox="0 0 240 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="hg1" cx="50%" cy="45%">
+          <stop offset="0%" stop-color="#F0EEFF"/>
+          <stop offset="100%" stop-color="#F8F7FF" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="hleaf1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#6C63FF" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="#4ECDC4" stop-opacity="0.2"/>
+        </linearGradient>
+      </defs>
+      <!-- Soft glow -->
+      <ellipse cx="120" cy="100" rx="110" ry="90" fill="url(#hg1)"/>
+      <!-- Terrarium jar -->
+      <ellipse cx="120" cy="158" rx="52" ry="8" fill="#E0DCF0" opacity="0.4"/>
+      <path d="M78 60 Q78 45 96 40 L144 40 Q162 45 162 60 L162 140 Q162 158 120 160 Q78 158 78 140Z" fill="white" fill-opacity="0.6" stroke="#D4CCF0" stroke-width="2"/>
+      <path d="M96 40 Q96 32 120 30 Q144 32 144 40" stroke="#D4CCF0" stroke-width="2" fill="none"/>
+      <ellipse cx="120" cy="40" rx="24" ry="4" fill="#D4CCF0" opacity="0.3"/>
+      <!-- Plant inside jar -->
+      <path d="M120 145 L120 100" stroke="#4ECDC4" stroke-width="3" stroke-linecap="round"/>
+      <path d="M120 100 Q100 85 108 70" stroke="#4ECDC4" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <path d="M120 110 Q140 95 135 78" stroke="#4ECDC4" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <path d="M120 120 Q105 108 95 95" stroke="#66D9C2" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <!-- Leaves -->
+      <ellipse cx="105" cy="68" rx="12" ry="8" fill="#4ECDC4" opacity="0.6" transform="rotate(-30 105 68)"/>
+      <ellipse cx="138" cy="75" rx="13" ry="7" fill="#66D9C2" opacity="0.5" transform="rotate(25 138 75)"/>
+      <ellipse cx="92" cy="92" rx="10" ry="6" fill="#4ECDC4" opacity="0.4" transform="rotate(-45 92 92)"/>
+      <!-- Tiny flower -->
+      <circle cx="108" cy="65" r="4" fill="#FF6B9D" opacity="0.6"/>
+      <circle cx="108" cy="65" r="2" fill="#FFB8C6"/>
+      <!-- Small character peeking from behind jar -->
+      <circle cx="170" cy="128" r="18" fill="#FFE8D6"/>
+      <circle cx="164" cy="125" r="2.5" fill="#2D2B3D"/>
+      <circle cx="176" cy="125" r="2.5" fill="#2D2B3D"/>
+      <circle cx="165.5" cy="124" r="1" fill="white"/>
+      <circle cx="177.5" cy="124" r="1" fill="white"/>
+      <path d="M166 132 Q170 136 174 132" stroke="#2D2B3D" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      <ellipse cx="160" cy="131" rx="4" ry="2.5" fill="#FFB8C6" opacity="0.4"/>
+      <ellipse cx="180" cy="131" rx="4" ry="2.5" fill="#FFB8C6" opacity="0.4"/>
+      <!-- Character body -->
+      <ellipse cx="170" cy="152" rx="14" ry="10" fill="#C4B5FF"/>
+      <ellipse cx="155" cy="145" rx="5" ry="8" fill="#C4B5FF" transform="rotate(-10 155 145)"/>
+      <!-- Floating particles -->
+      <circle cx="55" cy="50" r="3" fill="#FFD93D" opacity="0.4"/>
+      <circle cx="185" cy="55" r="2.5" fill="#FF6B9D" opacity="0.3"/>
+      <circle cx="45" cy="90" r="2" fill="#6C63FF" opacity="0.25"/>
+      <circle cx="195" cy="90" r="1.5" fill="#4ECDC4" opacity="0.3"/>
+      <circle cx="70" cy="35" r="1.5" fill="#4ECDC4" opacity="0.3"/>
+      <!-- Stars -->
+      <path d="M60 25 L61.5 29 L66 29 L62.5 31.5 L63.5 36 L60 33 L56.5 36 L57.5 31.5 L54 29 L58.5 29Z" fill="#FFD93D" opacity="0.5" transform="scale(0.6) translate(30, 10)"/>
+      <path d="M60 25 L61.5 29 L66 29 L62.5 31.5 L63.5 36 L60 33 L56.5 36 L57.5 31.5 L54 29 L58.5 29Z" fill="#6C63FF" opacity="0.3" transform="scale(0.5) translate(340, 40)"/>
+    </svg>`,
+
+  // ── Section break illustrations ──
+  'section-mood': `
+    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="40" cy="40" r="36" fill="#F0EEFF" opacity="0.5"/>
+      <!-- Magnifying glass looking at heart -->
+      <circle cx="35" cy="35" r="18" fill="white" stroke="#6C63FF" stroke-width="2.5"/>
+      <line x1="48" y1="48" x2="60" y2="60" stroke="#6C63FF" stroke-width="3" stroke-linecap="round"/>
+      <!-- Heart inside magnifying glass -->
+      <path d="M35 28 C35 24 29 22 29 26 C29 30 35 35 35 35 C35 35 41 30 41 26 C41 22 35 24 35 28Z" fill="#FF6B9D" opacity="0.7"/>
+      <!-- Sparkle -->
+      <circle cx="58" cy="18" r="2.5" fill="#FFD93D" opacity="0.6"/>
+      <circle cx="18" cy="58" r="2" fill="#4ECDC4" opacity="0.4"/>
+    </svg>`,
+
+  'section-deep': `
+    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="40" cy="40" r="36" fill="#FFF0F5" opacity="0.5"/>
+      <!-- Ocean wave layers (depth metaphor) -->
+      <path d="M10 45 Q20 38 30 45 Q40 52 50 45 Q60 38 70 45 L70 65 Q60 72 50 65 Q40 58 30 65 Q20 72 10 65Z" fill="#6C63FF" opacity="0.12"/>
+      <path d="M10 52 Q20 45 30 52 Q40 59 50 52 Q60 45 70 52 L70 70 Q60 75 50 70 Q40 65 30 70 Q20 75 10 70Z" fill="#6C63FF" opacity="0.2"/>
+      <!-- Diving character -->
+      <circle cx="40" cy="30" r="10" fill="#FFE0CC"/>
+      <path d="M36 28 Q38 31 40 28" stroke="#2D2B3D" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      <path d="M40 28 Q42 31 44 28" stroke="#2D2B3D" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      <path d="M37 34 Q40 37 43 34" stroke="#2D2B3D" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      <!-- Bubbles -->
+      <circle cx="50" cy="22" r="2.5" fill="#A8D8EA" opacity="0.5"/>
+      <circle cx="55" cy="16" r="1.8" fill="#A8D8EA" opacity="0.4"/>
+      <circle cx="48" cy="14" r="1.2" fill="#A8D8EA" opacity="0.3"/>
+    </svg>`,
+
+  'section-feedback': `
+    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="40" cy="40" r="36" fill="#E8FFF5" opacity="0.5"/>
+      <!-- Envelope with heart -->
+      <rect x="16" y="28" width="48" height="32" rx="6" fill="white" stroke="#4ECDC4" stroke-width="2"/>
+      <path d="M16 32 L40 48 L64 32" stroke="#4ECDC4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <!-- Heart coming out -->
+      <path d="M40 18 C40 14 34 12 34 16 C34 20 40 26 40 26 C40 26 46 20 46 16 C46 12 40 14 40 18Z" fill="#FF6B9D" opacity="0.7"/>
+      <!-- Sparkles -->
+      <circle cx="22" cy="20" r="2" fill="#FFD93D" opacity="0.5"/>
+      <circle cx="60" cy="22" r="1.5" fill="#6C63FF" opacity="0.4"/>
+      <path d="M56 16 L57 13 L58 16 L61 17 L58 18 L57 21 L56 18 L53 17Z" fill="#FFD93D" opacity="0.5"/>
+    </svg>`,
   // ── Set 1: Character Affinity ──
 
   'char-2d': `

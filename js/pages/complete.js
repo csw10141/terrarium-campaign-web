@@ -6,6 +6,14 @@ export function renderComplete(params) {
   const phase = getPhase(phaseId);
 
   const messages = {
+    interview: {
+      emoji: `<svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <path d="M24 44C35 44 44 35 44 24C44 13 35 4 24 4C13 4 4 13 4 24C4 35 13 44 24 44Z" fill="#4ECDC4" opacity="0.2"/>
+        <path d="M16 24L22 30L34 18" stroke="#4ECDC4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>`,
+      title: '함께 해주셔서 감사해요!',
+      desc: '솔직하게 나눠주신 이야기가\n정말 큰 도움이 됩니다.\n여러분의 목소리가 가드너를 만들어갑니다.'
+    },
     phase1: {
       emoji: `<svg width="48" height="48" viewBox="0 0 48 48" fill="none">
         <path d="M24 44C35 44 44 35 44 24C44 13 35 4 24 4C13 4 4 13 4 24C4 35 13 44 24 44Z" fill="#4ECDC4" opacity="0.2"/>

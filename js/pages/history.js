@@ -1,8 +1,9 @@
 import { navigate } from '../router.js';
 import { getAllSurveys, decryptSurvey } from '../store.js';
-import { PHASES } from '../survey-data.js';
+import { PHASES, INTERVIEW } from '../survey-data.js';
 
 const PHASE_LABELS = {
+  interview: '통합 인터뷰',
   phase1: '1차 탐색',
   phase2: '2차 심층',
   phase3: '3차 피드백'
@@ -142,14 +143,17 @@ async function showDetail(entry) {
     const survey = await decryptSurvey(entry);
 
     const phaseLabel = PHASE_LABELS[survey.surveyType] || survey.surveyType;
-    const phase = PHASES[survey.surveyType];
+    // interview 타입은 모든 phase의 질문을 합쳐서 표시
+    const allQuestions = survey.surveyType === 'interview'
+      ? INTERVIEW.sections.flatMap(s => s.questions)
+      : (PHASES[survey.surveyType]?.questions || []);
     const submittedAt = survey.metadata?.submittedAt
       ? new Date(survey.metadata.submittedAt).toLocaleString('ko-KR')
       : '-';
 
     let answersHtml = '';
-    if (phase && survey.answers) {
-      for (const q of phase.questions) {
+    if (allQuestions.length > 0 && survey.answers) {
+      for (const q of allQuestions) {
         let answer;
         if (q.type === 'contact') {
           answer = survey.contact;

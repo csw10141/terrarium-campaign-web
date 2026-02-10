@@ -415,6 +415,65 @@ export function getPhase(phaseId) {
   return PHASES[phaseId] || null;
 }
 
+// 통합 인터뷰 (좌판 형식): 1~3차 전체를 하나의 플로우로 진행
+export const INTERVIEW = {
+  id: 'interview',
+  title: '가드너 리서치',
+  subtitle: '앉아서 함께 이야기해요',
+  description: '생활·정서 탐색부터 피드백까지 한 번에',
+  estimatedTime: '약 10분',
+  sections: [
+    {
+      id: 'section1',
+      title: '지금의 나',
+      subtitle: '생활과 마음 상태를 가볍게 들어볼게요',
+      icon: 'section-mood',
+      questions: PHASES.phase1.questions
+    },
+    {
+      id: 'section2',
+      title: '조금 더 깊이',
+      subtitle: '감정의 구조를 함께 살펴볼게요',
+      icon: 'section-deep',
+      questions: PHASES.phase2.questions
+    },
+    {
+      id: 'section3',
+      title: '마지막 한마디',
+      subtitle: '참여 의사와 연락처를 남겨주세요',
+      icon: 'section-feedback',
+      questions: PHASES.phase3.questions
+    }
+  ]
+};
+
+// 통합 인터뷰의 전체 질문 리스트 (섹션 전환 카드 포함)
+export function getInterviewFlow() {
+  const flow = [];
+  INTERVIEW.sections.forEach((section, si) => {
+    // 섹션 시작 카드 (첫 섹션 제외)
+    if (si > 0) {
+      flow.push({
+        id: `_section_${section.id}`,
+        type: 'section-break',
+        title: section.title,
+        subtitle: section.subtitle,
+        icon: section.icon,
+        sectionIndex: si
+      });
+    }
+    section.questions.forEach(q => {
+      flow.push({ ...q, _sectionIndex: si });
+    });
+  });
+  return flow;
+}
+
+// 전체 실제 질문 수 (섹션 브레이크 제외)
+export function getInterviewQuestionCount() {
+  return INTERVIEW.sections.reduce((sum, s) => sum + s.questions.length, 0);
+}
+
 export function getPhaseList() {
   return Object.values(PHASES).map(p => ({
     id: p.id,
