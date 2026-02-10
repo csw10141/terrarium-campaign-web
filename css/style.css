@@ -806,8 +806,137 @@ body {
   border: 0;
 }
 
-/* ===== Desktop background ===== */
-@media (min-width: 481px) {
+/* ===== Tablet (768px+) ===== */
+@media (min-width: 768px) {
+  :root {
+    --max-width: 640px;
+  }
+
+  html {
+    font-size: 17px;
+  }
+
+  .page {
+    padding: 32px 36px;
+  }
+
+  /* Home */
+  .home {
+    gap: 28px;
+    padding-top: 48px;
+  }
+
+  .home__hero {
+    max-width: 360px;
+  }
+
+  .home__logo {
+    font-size: 3.4rem;
+  }
+
+  .home__tagline {
+    font-size: 1.25rem;
+  }
+
+  .home__desc {
+    font-size: 1rem;
+    max-width: 400px;
+  }
+
+  .home__cta {
+    max-width: 400px;
+  }
+
+  .home__start-btn {
+    font-size: 1.15rem;
+    padding: 20px 28px;
+  }
+
+  /* Survey */
+  .question__text {
+    font-size: 1.45rem;
+  }
+
+  .option {
+    padding: 18px 22px;
+    font-size: 1rem;
+  }
+
+  .image-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .image-option {
+    padding: 28px 16px 20px;
+  }
+
+  .image-option__visual {
+    width: 140px;
+    height: 140px;
+  }
+
+  .image-option__visual svg {
+    width: 140px;
+    height: 140px;
+  }
+
+  /* Section Break */
+  .section-break {
+    padding: 80px 32px;
+  }
+
+  .section-break__icon {
+    width: 100px;
+    height: 100px;
+  }
+
+  .section-break__icon svg {
+    width: 100px;
+    height: 100px;
+  }
+
+  .section-break__title {
+    font-size: 1.7rem;
+  }
+
+  /* Complete */
+  .complete__icon {
+    width: 112px;
+    height: 112px;
+  }
+
+  .complete__title {
+    font-size: 1.7rem;
+  }
+
+  .complete__actions {
+    max-width: 360px;
+  }
+
+  /* Settings */
+  .settings__card {
+    padding: 24px;
+  }
+
+  /* Toast */
+  .toast {
+    font-size: 0.95rem;
+    padding: 14px 28px;
+  }
+}
+
+/* ===== Large Tablet / Desktop (1024px+) ===== */
+@media (min-width: 1024px) {
+  :root {
+    --max-width: 720px;
+  }
+
+  html {
+    font-size: 18px;
+  }
+
   body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   }
@@ -815,7 +944,47 @@ body {
   #app {
     background: var(--bg);
     box-shadow: 0 0 60px rgba(0, 0, 0, 0.15);
-    border-radius: 0;
+    min-height: 100vh;
+  }
+
+  .page {
+    padding: 40px 48px;
+  }
+
+  .home {
+    padding-top: 56px;
+  }
+
+  .home__hero {
+    max-width: 400px;
+  }
+
+  .home__desc {
+    max-width: 440px;
+  }
+
+  .home__cta {
+    max-width: 420px;
+  }
+
+  .question__text {
+    font-size: 1.55rem;
+  }
+}
+
+/* ===== Small Desktop background (481~767px) ===== */
+@media (min-width: 481px) and (max-width: 767px) {
+  :root {
+    --max-width: 540px;
+  }
+
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  #app {
+    background: var(--bg);
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.15);
     min-height: 100vh;
   }
 }
